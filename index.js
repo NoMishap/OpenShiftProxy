@@ -4,6 +4,7 @@ var app = express();
 var http = require('http');
 var path = require('path');
 var cfenv = require('cfenv');
+var pdftotext= require('./extractPdf');
 
 // create a new express server
 var app = express();
@@ -20,33 +21,21 @@ app.get('/', function (request, response) {
     response.send("hi");
     response.end();
     });
-/*
+
 var time2;
 var time1; 
 app.get('/pdftotext', function (request, response) {
     
-    time1 = Date.now();
-        document_conversion.convert({
-        file: fs.createReadStream('ciao.pdf'),
-        conversion_target: 'ANSWER_UNITS',
-        // Use a custom configuration.
-        config: config
-            }, function (err, responsedoc) {
-            if (err) {
-                console.error(err);
-            } else {
-                time2 = Date.now();
-                var converted = JSON.stringify(responsedoc, null, 2);
-                fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
-                    console.log(err);
-                        });
-                response.status(200); 
-                response.send(time1+" "+time2+" "+converted); 
-                response.end();
-            }
-            });
+    response.status(200);
+    //time1 = Date.now();
+    pdftotext.convert(response);
+    //time2 = Date.now();
+    /*fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
+        console.log(err);
+            });*/
+            
 });
-*/
+
 app.get('/filelog', function (request, response) {
     response.sendFile(path.join(__dirname +'/log.txt'));
     });
