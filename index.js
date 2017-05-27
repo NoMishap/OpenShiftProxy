@@ -25,18 +25,19 @@ app.get('/', function (request, response) {
 var time2;
 var time1; 
 
-var pdfUtil = require('pdf-to-text');
-
 
 function convert(write)
 {
-    var pdf_path = "./ciao.pdf";
     
-    pdfUtil.pdfToText(pdf_path, function(err, data) {
-    if (err) throw(err);
-    write.send(data);
+    var pdfText = require('pdf-text')
+
+    var pathToPdf ="./ciao.pdf"
+
+    pdfText(pathToPdf, function(err, chunks) {
+    chunks.map((str)=>write.send(str))
     write.end();
-    });
+    })
+
 }
 
 app.get('/pdftotext', function (request, response) {
