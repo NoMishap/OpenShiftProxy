@@ -53,5 +53,5 @@ app.get('/ping', function (request, response) {
     response.end();
     });
 
-app.listen(appEnv.port);
-console.log("server in esecuzione alla porta"+appEnv.port);
+app.listen("80");
+console.log("server in esecuzione alla porta: 80");
