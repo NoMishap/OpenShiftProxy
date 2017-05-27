@@ -4,7 +4,7 @@ var app = express();
 var http = require('http');
 var path = require('path');
 var cfenv = require('cfenv');
-var pdftotext= require('./extractPdf');
+//var pdftotext= require('./extractPdf');
 
 // create a new express server
 var app = express();
@@ -24,11 +24,26 @@ app.get('/', function (request, response) {
 
 var time2;
 var time1; 
+
+var pdfUtil = require('pdf-to-text');
+
+
+function convert(write)
+{
+    var pdf_path = "./ciao.pdf";
+    
+    pdfUtil.pdfToText(pdf_path, function(err, data) {
+    if (err) throw(err);
+    write.send(data);
+    write.end();
+    });
+}
+
 app.get('/pdftotext', function (request, response) {
     
     response.status(200);
     //time1 = Date.now();
-    pdftotext.convert(response);
+    convert(response);
     //time2 = Date.now();
     /*fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
         console.log(err);
