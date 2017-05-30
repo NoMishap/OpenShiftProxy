@@ -23,8 +23,8 @@ app.get('/', function (request, response) {
     });
 
 
-var time2;
-var time1; 
+var time2=0;
+var time1=0; 
 var options = {
   host: 'pdfconverterservice-openshiftproxy11.7e14.starter-us-west-2.openshiftapps.com'
 };
@@ -39,13 +39,12 @@ callback = function(response,writer) {
 
   //the whole response has been recieved, so we just print it out here
   response.on('end', function (c) {
-    console.log(str);
     writer.send(str);
     writer.end();
-    //time2 = Date.now();
-    /*fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
+    time2 = Date.now();
+    fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
         console.log(err);
-            });*/
+            });
   });
 }//callback
 
@@ -57,7 +56,7 @@ function convert(writer)
 app.get('/pdftotext', function (request, response) {
     
     response.status(200);
-    //time1 = Date.now();
+    time1 = Date.now();
     convert(response);
 });
 
