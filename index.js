@@ -22,22 +22,36 @@ app.get('/', function (request, response) {
     response.end();
     });
 
+
 var time2;
 var time1; 
+var options = {
+  host: 'pdfconverterservice-openshiftproxy11.7e14.starter-us-west-2.openshiftapps.com'
+};
 
+callback = function(response,writer) {
+  var str = '';
 
-function convert(write)
+  //another chunk of data has been recieved, so append it to `str`
+  response.on('data', function (chunk) {
+    str += chunk;
+  });
+
+  //the whole response has been recieved, so we just print it out here
+  response.on('end', function (c) {
+    console.log(str);
+    writer.send(str);
+    writer.end();
+    //time2 = Date.now();
+    /*fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
+        console.log(err);
+            });*/
+  });
+}//callback
+
+function convert(writer)
 {
-    
-    var pdfText = require('pdf-text')
-
-    var pathToPdf ="./ciao.pdf"
-
-    pdfText(pathToPdf, function(err, chunks) {
-    chunks.map((str)=>write.send(str))
-    write.end();
-    })
-
+    http.request(options, (response)=>callback(response,writer)).end();
 }
 
 app.get('/pdftotext', function (request, response) {
@@ -45,11 +59,6 @@ app.get('/pdftotext', function (request, response) {
     response.status(200);
     //time1 = Date.now();
     convert(response);
-    //time2 = Date.now();
-    /*fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
-        console.log(err);
-            });*/
-            
 });
 
 app.get('/filelog', function (request, response) {
