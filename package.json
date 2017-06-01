@@ -8,6 +8,7 @@
   "dependencies": {
     "cfenv": "1.0.x",
     "express": "4.13.x",
+    "node-dogstatsd":"",
     "pdf-text": ""
   },
   "repository": {},

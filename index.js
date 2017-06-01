@@ -4,7 +4,9 @@ var app = express();
 var http = require('http');
 var path = require('path');
 var cfenv = require('cfenv');
-//var pdftotext= require('./extractPdf');
+var StatsD = require('node-dogstatsd').StatsD;
+var dogstatsd = new StatsD();
+
 
 // create a new express server
 var app = express();
@@ -40,9 +42,11 @@ callback = function(response,writer,tempi) {
     writer.send(str);
     writer.end();
     tempi.tempoOverheadMid2=Date.now();
-    fs.appendFile(__dirname +'/log.txt', tempi+"\n", function (err) {
-        console.log(err);
-            });
+    dogstatsd.recordExecutionTime("adapter_PaaS_overhead", tempi.tempoOverheadMid2-tempi.tempoOverheadMid1, "");
+    dogstatsd.recordExecutionTime("adapter_Service_call", tempi.tempoServizio2-tempi.tempoServizio1, "");
+//     fs.appendFile(__dirname +'/log.txt', tempi+"\n", function (err) {
+//         console.log(err);
+//             });
   });
 }//callback
 
@@ -53,6 +57,7 @@ function convert(writer,tempi)
 }
 
 app.get('/pdftotext', function (request, response) {
+    dogstatsd.increment('page.views');
     var tempi={
          tempoOverheadMid1:0,
          tempoOverheadMid2:0,
