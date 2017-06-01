@@ -23,15 +23,13 @@ app.get('/', function (request, response) {
     });
 
 
-var time2=0;
-var time1=0; 
 var options = {
   host: 'pdfconverterservice-openshiftproxy11.7e14.starter-us-west-2.openshiftapps.com'
 };
 
-callback = function(response,writer) {
-  var str = '';
-
+callback = function(response,writer,tempi) {
+    tempi.tempoServizio2 = Date.now();
+      var str = '';
   //another chunk of data has been recieved, so append it to `str`
   response.on('data', function (chunk) {
     str += chunk;
@@ -41,23 +39,30 @@ callback = function(response,writer) {
   response.on('end', function (c) {
     writer.send(str);
     writer.end();
-    time2 = Date.now();
-    fs.appendFile(__dirname +'/log.txt', time1+" "+time2+"\n", function (err) {
+    tempi.tempoOverheadMid2=Date.now();
+    fs.appendFile(__dirname +'/log.txt', tempi+"\n", function (err) {
         console.log(err);
             });
   });
 }//callback
 
-function convert(writer)
+function convert(writer,tempi)
 {
-    http.request(options, (response)=>callback(response,writer)).end();
+    tempi.tempoServizio1 = Date.now();
+    http.request(options, (response)=>callback(response,writer,tempi)).end();
 }
 
 app.get('/pdftotext', function (request, response) {
-    
+    var tempi={
+         tempoOverheadMid1:0,
+         tempoOverheadMid2:0,
+         tempoServizio1:0,
+         tempoServizio2:0,
+         toString:function() {return "tempiOverheadMidlleware: "+this.tempoOverheadMid1+" "+ this.tempoOverheadMid2+" tempiServizio: "+this.tempoServizio1+" "+this.tempoServizio2;}
+    }
+    tempi.tempoOverheadMid1= Date.now()
     response.status(200);
-    time1 = Date.now();
-    convert(response);
+    convert(response,tempi);
 });
 
 app.get('/filelog', function (request, response) {
