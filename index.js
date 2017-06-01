@@ -5,7 +5,7 @@ var http = require('http');
 var path = require('path');
 var cfenv = require('cfenv');
 var StatsD = require('node-dogstatsd').StatsD;
-var dogstatsd = new StatsD();
+var dogstatsd = new StatsD('example.org',8125);
 
 
 // create a new express server
@@ -42,8 +42,8 @@ callback = function(response,writer,tempi) {
     writer.send(str);
     writer.end();
     tempi.tempoOverheadMid2=Date.now();
-    dogstatsd.recordExecutionTime("adapter_PaaS_overhead", tempi.tempoOverheadMid2-tempi.tempoOverheadMid1, "");
-    dogstatsd.recordExecutionTime("adapter_Service_call", tempi.tempoServizio2-tempi.tempoServizio1, "");
+    dogstatsd.timing("adapter_PaaS_overhead.time", tempi.tempoOverheadMid2-tempi.tempoOverheadMid1);
+    dogstatsd.timing("adapter_Service_call.time", tempi.tempoServizio2-tempi.tempoServizio1);
 //     fs.appendFile(__dirname +'/log.txt', tempi+"\n", function (err) {
 //         console.log(err);
 //             });
