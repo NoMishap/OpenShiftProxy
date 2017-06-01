@@ -4,8 +4,16 @@ var app = express();
 var http = require('http');
 var path = require('path');
 var cfenv = require('cfenv');
-var StatsD = require('node-dogstatsd').StatsD;
-var dogstatsd = new StatsD('example.org',8125);
+var dogapi = require("dogapi");
+
+var optionsDogAPi = {
+ api_key: "2f5bcc61563c67c2a01b9eca54725b29",
+ app_key: "f964330db51a858fe53a66cfff767ad3f116772d",
+};
+
+dogapi.initialize(optionsDogAPi);
+// var DataDog = require('datadog');
+// var dogstatsd = new DataDog('2f5bcc61563c67c2a01b9eca54725b29', 'f964330db51a858fe53a66cfff767ad3f116772d');
 
 
 // create a new express server
@@ -42,8 +50,8 @@ callback = function(response,writer,tempi) {
     writer.send(str);
     writer.end();
     tempi.tempoOverheadMid2=Date.now();
-    dogstatsd.timing("adapter_PaaS_overhead.time", tempi.tempoOverheadMid2-tempi.tempoOverheadMid1);
-    dogstatsd.timing("adapter_Service_call.time", tempi.tempoServizio2-tempi.tempoServizio1);
+    dogapi.metric.send("adapter_Openshift_overhead.time", tempi.tempoOverheadMid2-tempi.tempoOverheadMid1);
+    dogapi.metric.send("adapter_Service_Openshift_call.time", tempi.tempoServizio2-tempi.tempoServizio1);
 //     fs.appendFile(__dirname +'/log.txt', tempi+"\n", function (err) {
 //         console.log(err);
 //             });
@@ -57,7 +65,6 @@ function convert(writer,tempi)
 }
 
 app.get('/pdftotext', function (request, response) {
-    dogstatsd.increment('page.views');
     var tempi={
          tempoOverheadMid1:0,
          tempoOverheadMid2:0,
