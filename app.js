@@ -2,9 +2,8 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var cfenv = require('cfenv');
 
-var check = require('./routes/index');
+var indexRouter = require('./routes/index');
 var checkAliveRouter = require('./routes/checkAlive');
 
 var app = express();
