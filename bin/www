@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var apm = require('elastic-apm-node').start(
+var apm = exports.apm = require('elastic-apm-node').start(
    {
    serviceName: 'OpenshiftProxy',
    serverUrl: ' http://88.147.126.145:8010',
