@@ -3,9 +3,14 @@ var apm = require('elastic-apm-node');
 
 exports.send=function()
 {
+  /*system load
+  os.loadavg()
+  [ 0.84423828125, 0.5849609375, 0.44189453125 ]
+  [1,5,15]
 
-
-
+  os.cpus().length
+  number of cpu present
+  */
 
   /*cpu load
   {
