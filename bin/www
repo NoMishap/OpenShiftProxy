@@ -7,6 +7,7 @@ var apm = require('elastic-apm-node').start(
    {
    serviceName: 'OpenshiftProxy',
    serverUrl: ' http://88.147.126.145:8010',
+   active: process.env.NODE_ENV === 'production',
  });
 var app = require('../app');
 var debug = require('debug')('skel:server');
