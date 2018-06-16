@@ -4,13 +4,18 @@ var apm = require('elastic-apm-node');
 exports.send=function()
 {
   /*system load
-  os.loadavg()
   [ 0.84423828125, 0.5849609375, 0.44189453125 ]
   [1,5,15]
-
-  os.cpus().length
-  number of cpu present
   */
+  var load= new Promise(function(resolve,reject)
+    {
+      let load=
+      {
+        avg:os.loadavg(),
+        ncpu:os.cpus().length
+      }
+      resolve(load);
+    });
 
   /*cpu load
   {
@@ -18,7 +23,7 @@ exports.send=function()
     currentload: 4.540867810292633,
   }
   */
-  //si.currentLoad().then(console.log);
+  var cpuLoad =  si.currentLoad()
 
   /*memory load
   {
@@ -29,7 +34,7 @@ exports.send=function()
     available: 7790964736
   }
   */
-  //si.mem().then(console.log);
+  var memLoad=si.mem();
 
   /*network load
   {
@@ -42,6 +47,7 @@ exports.send=function()
     ms: 221719
   }
   */
-  //si.networkInterfaces().then((intf)=>si.networkStats(intf[1].iface)).then(console.log);
+  si.networkInterfaces().then((intf)=>si.networkStats(intf[1].iface));
+  si.networkInterfaces().then(ifcs=>ifcs.filter((ifc)=>ifc.iface!=='lo').forEach(ifc=>si.networkStats(ifc.iface)));
 
 }
