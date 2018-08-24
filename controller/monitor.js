@@ -5,9 +5,13 @@ var os = require('os');
 var http = require('http');
 const querystring = require('querystring');
 
+var hostname=process.env.NODE_ENV === 'production'? '88.147.126.145': 'logstash'
+var port=process.env.NODE_ENV === 'production'? '8011': '8085'
+
+
 const options = {
-  hostname: '88.147.126.145',
-  port: 8011 ,
+  hostname,
+  port,
   path: '/',
   method: 'POST',
   headers: {

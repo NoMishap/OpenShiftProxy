@@ -1,6 +1,6 @@
 var http = require('http');
 var options = {
-  host: 'www.google.it'
+  host:  process.env.SERVICE
 };
 
 

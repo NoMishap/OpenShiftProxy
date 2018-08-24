@@ -1,6 +1,7 @@
 .directory
 /PDFconvertForOpenshift
-/public 
+/public
+.project
 # Logs
 logs
 *.log

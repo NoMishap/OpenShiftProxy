@@ -3,9 +3,11 @@
 /**
  * Module dependencies.
  */
+var hostname=process.env.NODE_ENV === 'production'? '88.147.126.145': 'logstash'
+
 var apm = exports.apm = require('elastic-apm-node').start(
    {
-   serviceName: 'OpenshiftProxy',
+   serviceName: process.env.NAME,
    serverUrl: ' http://88.147.126.145:8010',
    active: process.env.NODE_ENV === 'production',
  });
