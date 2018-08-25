@@ -86,6 +86,7 @@ exports.send=function()
     ([load,cpuLoad,memLoad,netLoadRx,netLoadTx])=>
       {
         let metrics=Object.assign({},load,cpuLoad,memLoad,netLoadRx,netLoadTx);
+        Object.keys(metrics).map((key)=>metrics[key]=metrics[key].toFixed(3));
         //var metricsKV=JSON.stringify(metrics).replace(/:/g,"=").replace(/{|}/g,"").replace(/,/g," ");
         let metricsKV=querystring.stringify(metrics," ");
         let send= options;
