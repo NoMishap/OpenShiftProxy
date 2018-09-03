@@ -22,4 +22,10 @@ To deploy the app:
 
 - and then click Create
 
-  
+  ENV variables:
+
+process.env.SERVICE = url of the pdf service
+
+process.env.NODE_ENV=== 'production'=> boolean production or not
+process.env.PORT= port where the service should listen if not setted try to request to paas provider otherwise use 3000 as def
+process.env.NAME= name of the service used by elk in apm module
