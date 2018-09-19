@@ -5,8 +5,8 @@ var os = require('os');
 var http = require('http');
 const querystring = require('querystring');
 
-var hostname=process.env.NODE_ENV === 'production'? '88.147.126.145': 'logstash';
-var port=process.env.NODE_ENV === 'production'? '8011': '8085';
+var hostname=process.env.LOG_HOSTNAME;
+var port=process.env.LOG_PORT;
 var serviceName= process.env.NAME;
 
 
