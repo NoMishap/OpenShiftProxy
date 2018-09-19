@@ -5,8 +5,9 @@ var os = require('os');
 var http = require('http');
 const querystring = require('querystring');
 
-var hostname=process.env.NODE_ENV === 'production'? '88.147.126.145': 'logstash'
-var port=process.env.NODE_ENV === 'production'? '8011': '8085'
+var hostname=process.env.LOG_HOSTNAME;
+var port=process.env.LOG_PORT;
+var serviceName= process.env.NAME;
 
 
 const options = {
@@ -73,11 +74,7 @@ exports.send=function()
       tx: 5356664,
       rx_sec: 8.356251322191664,
       tx_sec: 39.39073408081235,
-      ms: 47270 },]
-  */
-// var arrofP=  si.networkInterfaces().then(ifcs=>ifcs.filter((ifc)=>ifc.iface!=='lo').map(ifc=>ifc.iface).map(ifc=>si.networkStats(ifc))).then(arr=>Promise.all(arr))
-// var arrofP=  si.networkInterfaces().then(ifcs=>ifcs.filter((ifc)=>ifc.iface!=='lo').map(ifc=>ifc.iface).map(ifc=>si.networkStats(ifc))).then(arr=>Promise.all(arr)).then(ifaces=>ifaces.reduce((sum,iface)=>sum=sum+(iface.rx_sec/iface.ms)),0)
-//var netLoad=si.networkInterfaces().then(ifcs=>ifcs.filter((ifc)=>ifc.iface!=='lo').map(ifc=>ifc.iface).map(ifc=>si.networkStats(ifc))).then(arr=>Promise.all(arr).then(array=>Object.assign({},array.map(iface=>{return{"tx":parseFloat(iface.tx_sec),"rx":parseFloat(iface.rx_sec)}}))))
+      ms: 47270 },]*/
   let netLoad=si.networkInterfaces().then(ifcs=>ifcs.filter((ifc)=>ifc.iface!=='lo').map(ifc=>ifc.iface).map(ifc=>si.networkStats(ifc))).then(arr=>Promise.all(arr));
   let netLoadRx=netLoad.then(ar=>{return{netLoadRx:ar.map(v=>v.rx_sec).reduce((a,b)=>a+b)}});
   let netLoadTx=netLoad.then(ar=>{return{netLoadTx:ar.map(v=>v.tx_sec).reduce((a,b)=>a+b)}});
@@ -87,14 +84,13 @@ exports.send=function()
       {
         let metrics=Object.assign({},load,cpuLoad,memLoad,netLoadRx,netLoadTx);
         Object.keys(metrics).map((key)=>metrics[key]=metrics[key].toFixed(3));
-        //var metricsKV=JSON.stringify(metrics).replace(/:/g,"=").replace(/{|}/g,"").replace(/,/g," ");
+
+        metrics.serviceName=serviceName;
         let metricsKV=querystring.stringify(metrics," ");
         let send= options;
         Object.assign(send.headers,{'Content-Length': Buffer.byteLength(metricsKV)});
-        //console.log(metricsKV);
 
         const req = http.request(options, (res) => {res.setEncoding('utf8')});
-
         req.on('error', (e) => {
           console.error(`problem with request: ${e.message}`);
         });
