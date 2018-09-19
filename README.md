@@ -17,7 +17,4 @@ To deploy the app:
 - hostname is automatic 
 - fill Path with /ping or /pdftotext
 - and then click Create
-
-
-
 RUN in dev: docker build . -t openshiftproocker run -p 8080:8080 --env-file ./env.list openshiftprox
