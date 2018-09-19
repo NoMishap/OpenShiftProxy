@@ -82,9 +82,10 @@ exports.send=function()
   Promise.all([load,cpuLoad,memLoad,netLoadRx,netLoadTx]).then(
     ([load,cpuLoad,memLoad,netLoadRx,netLoadTx])=>
       {
-        let metrics=Object.assign({},load,cpuLoad,memLoad,netLoadRx,netLoadTx,serviceName);
+        let metrics=Object.assign({},load,cpuLoad,memLoad,netLoadRx,netLoadTx);
         Object.keys(metrics).map((key)=>metrics[key]=metrics[key].toFixed(3));
 
+        metrics=Object.assign(metrics,serviceName);
         let metricsKV=querystring.stringify(metrics," ");
         let send= options;
         Object.assign(send.headers,{'Content-Length': Buffer.byteLength(metricsKV)});
