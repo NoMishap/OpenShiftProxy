@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var monitor= require('./controller/monitor')
 var indexRouter = require('./routes/index');
 var checkAliveRouter = require('./routes/checkAlive');
-var extSiteRouter = require('./routes/extSite');
 var pdfToTextRouter = require('./routes/pdfToText');
 
 var app = express();
