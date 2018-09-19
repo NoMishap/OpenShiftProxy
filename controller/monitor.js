@@ -85,12 +85,12 @@ exports.send=function()
         let metrics=Object.assign({},load,cpuLoad,memLoad,netLoadRx,netLoadTx);
         Object.keys(metrics).map((key)=>metrics[key]=metrics[key].toFixed(3));
 
-        metrics=Object.assign(metrics,serviceName);
+        metrics.serviceName=serviceName;
         let metricsKV=querystring.stringify(metrics," ");
         let send= options;
         Object.assign(send.headers,{'Content-Length': Buffer.byteLength(metricsKV)});
 
-
+        console.log(metrics);
         const req = http.request(options, (res) => {res.setEncoding('utf8')});
         req.on('error', (e) => {
           console.error(`problem with request: ${e.message}`);
