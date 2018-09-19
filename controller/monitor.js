@@ -90,7 +90,6 @@ exports.send=function()
         let send= options;
         Object.assign(send.headers,{'Content-Length': Buffer.byteLength(metricsKV)});
 
-        console.log(metrics);
         const req = http.request(options, (res) => {res.setEncoding('utf8')});
         req.on('error', (e) => {
           console.error(`problem with request: ${e.message}`);
