@@ -13,6 +13,7 @@ exports.get= function(req,res)
 function callback(response,writer)
 {
   var str = '';
+    console.log("status code"+response.statusCode);
   if ( response.statusCode==200)
   {
     response.on('data',chunk =>str += chunk);
@@ -23,9 +24,9 @@ function callback(response,writer)
   }
   else
   {
+    console.log("yes");
     writer.statusCode=response.statusCode;  
   } 
-  
  writer.end();
 }//callback
 
