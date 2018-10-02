@@ -13,12 +13,20 @@ exports.get= function(req,res)
 function callback(response,writer)
 {
   var str = '';
-  response.on('data',chunk =>str += chunk);
-  response.on('end', ()=>
-    {
-      writer.send(str);
-      writer.end();;
+  if ( response.statusCode==200)
+  {
+    response.on('data',chunk =>str += chunk);
+    response.on('end', ()=>
+        {
+        writer.send(str);
     });
+  }
+  else
+  {
+    writer.statusCode=response.statusCode;  
+  } 
+  
+ writer.end();
 }//callback
 
 function convert(writer)
