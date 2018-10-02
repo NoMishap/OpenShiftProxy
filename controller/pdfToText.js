@@ -25,9 +25,9 @@ function callback(response,writer)
   else
   {
     console.log("yes");
-    writer.statusCode=response.statusCode;  
+    writer.statusCode=response.statusCode;   
+    writer.end();
   } 
- writer.end();
 }//callback
 
 function convert(writer)
